@@ -1,4 +1,4 @@
-const Page = () => {
+const Home = () => {
   return (
     <div>
       <h1 className="text-3xl">Welcome to the Ultimate Next.js course!</h1>
@@ -6,4 +6,4 @@ const Page = () => {
   );
 };
 
-export default Page;
+export default Home;

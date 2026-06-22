@@ -1,17 +1,18 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
+import ThemeProvider from "@/context/Theme";
 
 const inter = localFont({
   src: "./fonts/InterVF.ttf",
   variable: "--font-inter",
-  weight: "100 200 300 400 500 700 800 900",
+  weight: "100 900",
 });
 
 const spaceGrotesk = localFont({
   src: "./fonts/SpaceGroteskVF.ttf",
   variable: "--font-space-grotesk",
-  weight: "300 400 500 700",
+  weight: "300 700",
 });
 
 export const metadata: Metadata = {
@@ -20,6 +21,8 @@ export const metadata: Metadata = {
     "A community-driven platform for asking and answering programming questions. Get help, share knowledge, and collaborate with developers from around the world. Explore topics in web development, mobile app development, algorithms, data structures, and more.",
   icons: {
     icon: "/images/site-logo.svg",
+    shortcut: "/images/site-logo.svg",
+    apple: "/images/site-logo.svg",
   },
 };
 
@@ -32,8 +35,18 @@ export default function RootLayout({
     <html
       lang="en"
       className={`${inter.className} ${spaceGrotesk.variable} h-full antialiased`}
+      suppressHydrationWarning
     >
-      <body className="min-h-full flex flex-col">{children}</body>
+      <body className="min-h-full flex flex-col">
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
+          {children}
+        </ThemeProvider>
+      </body>
     </html>
   );
 }

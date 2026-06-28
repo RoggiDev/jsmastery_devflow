@@ -52,8 +52,14 @@ const AuthForm = <T extends FieldValues>({
           control={form.control}
           name={field as Path<T>}
           render={({ field, fieldState }) => (
-            <Field className="flex w-full flex-col gap-2.5">
-              <FieldLabel className="paragraph-medium text-dark400_light700">
+            <Field
+              data-invalid={fieldState.invalid}
+              className="flex w-full flex-col gap-2.5"
+            >
+              <FieldLabel
+                htmlFor={field.name}
+                className="paragraph-medium text-dark400_light700"
+              >
                 {field.name === "email"
                   ? "Email Adress"
                   : field.name.charAt(0).toUpperCase() + field.name.slice(1)}
@@ -64,10 +70,11 @@ const AuthForm = <T extends FieldValues>({
                 type={field.name === "password" ? "password" : "text"}
                 {...field}
                 className="paragraph-regular background-light900_dark300 light-border-2 text-dark300_light700 no-focus rounded-1.5 min-h-12 border"
+                aria-invalid={fieldState.invalid}
               />
 
               {fieldState.error && (
-                <FieldError>{fieldState.error.message}</FieldError>
+                <FieldError>{fieldState.error?.message}</FieldError>
               )}
             </Field>
           )}

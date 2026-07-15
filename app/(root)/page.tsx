@@ -1,9 +1,12 @@
+import Link from "next/link";
+
 import QuestionCard from "@/components/cards/QuestionCard";
 import HomeFilter from "@/components/filters/HomeFilter";
 import LocalSearch from "@/components/search/LocalSearch";
 import { Button } from "@/components/ui/button";
 import ROUTES from "@/constants/routes";
-import Link from "next/link";
+import handleError from "@/lib/handlers/error";
+import { ValidationError } from "@/lib/http-errors";
 
 const questions = [
   {
@@ -20,46 +23,62 @@ const questions = [
       image:
         "https://static.vecteezy.com/system/resources/previews/002/002/403/non_2x/man-with-beard-avatar-character-isolated-icon-free-vector.jpg",
     },
-    createdAt: new Date(),
     upvotes: 10,
     answers: 5,
     views: 100,
+    createdAt: new Date(),
   },
   {
     _id: "2",
     title: "How to learn JavaScript?",
     description: "I want to learn JavaScript, can anyone help me?",
-    tags: [{ _id: "1", name: "JavaScript" }],
+    tags: [
+      { _id: "1", name: "JavaScript" },
+      { _id: "2", name: "JavaScript" },
+    ],
     author: {
       _id: "1",
       name: "John Doe",
       image:
         "https://static.vecteezy.com/system/resources/previews/002/002/403/non_2x/man-with-beard-avatar-character-isolated-icon-free-vector.jpg",
     },
-    createdAt: new Date("2021-09-01"),
     upvotes: 10,
     answers: 5,
     views: 100,
+    createdAt: new Date("2021-09-01"),
   },
 ];
+
+const test = async () => {
+  try {
+    throw new ValidationError({
+      title: ["Required"],
+      tags: ['"JavaScript" is not a valid tag.'],
+    });
+  } catch (error) {
+    return handleError(error);
+  }
+};
 
 interface SearchParams {
   searchParams: Promise<{ [key: string]: string }>;
 }
 
 const Home = async ({ searchParams }: SearchParams) => {
+  await test();
+
   const { query = "", filter = "" } = await searchParams;
 
   const filteredQuestions = questions.filter((question) => {
-    const matchQuery = question.title
+    const matchesQuery = question.title
       .toLowerCase()
-      .includes(query?.toLowerCase());
+      .includes(query.toLowerCase());
 
     const matchesFilter = filter
       ? question.tags[0].name.toLowerCase() === filter.toLowerCase()
       : true;
 
-    return matchQuery && matchesFilter;
+    return matchesQuery && matchesFilter;
   });
 
   return (

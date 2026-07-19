@@ -41,20 +41,7 @@ const handleError = (error: unknown, responseType: ResponseType = "server") => {
   }
 
   if (error instanceof ZodError) {
-    const fieldErrors = error.issues.reduce<Record<string, string[]>>(
-      (acc, issue) => {
-        if (issue.path.length === 0) return acc;
-
-        const path = issue.path.join(".");
-
-        (acc[path] ??= []).push(issue.message);
-
-        return acc;
-      },
-      {},
-    );
-
-    const validationError = new ValidationError(fieldErrors);
+    const validationError = ValidationError.fromZodError(error);
 
     logger.error(
       { err: error },
@@ -70,7 +57,7 @@ const handleError = (error: unknown, responseType: ResponseType = "server") => {
   }
 
   if (error instanceof Error) {
-    logger.error(error.message);
+    logger.error({ err: error }, error.message);
 
     return formatResponse(responseType, 500, error.message);
   }

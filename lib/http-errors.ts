@@ -1,3 +1,5 @@
+import { ZodError } from "zod";
+
 export class RequestError extends Error {
   statusCode: number;
   errors?: Record<string, string[]>;
@@ -20,6 +22,23 @@ export class ValidationError extends RequestError {
     super(400, message, fieldErrors);
     this.name = "ValidationError";
     this.errors = fieldErrors;
+  }
+
+  static fromZodError(error: ZodError): ValidationError {
+    const fieldErrors = error.issues.reduce<Record<string, string[]>>(
+      (acc, issue) => {
+        if (issue.path.length === 0) return acc;
+
+        const path = issue.path.join(".");
+
+        (acc[path] ??= []).push(issue.message);
+
+        return acc;
+      },
+      {},
+    );
+
+    return new ValidationError(fieldErrors);
   }
 
   static formatFieldErrors(errors: Record<string, string[]>): string {

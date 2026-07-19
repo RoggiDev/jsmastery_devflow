@@ -1,9 +1,14 @@
-import z from "zod";
+import { z } from "zod";
 
 export const SignInSchema = z.object({
   email: z
-    .email({ message: "Please provide a valid email address." })
-    .min(1, { message: "Email is required." }),
+    .string()
+    .min(1, { message: "Email is required." })
+    .pipe(
+      z.email({
+        message: "Please provide a valid email address.",
+      }),
+    ),
 
   password: z
     .string()
@@ -31,7 +36,11 @@ export const SignUpSchema = z.object({
   email: z
     .string()
     .min(1, { message: "Email is required." })
-    .email({ message: "Please provide a valid email address." }),
+    .pipe(
+      z.email({
+        message: "Please provide a valid email address.",
+      }),
+    ),
 
   password: z
     .string()
@@ -52,27 +61,28 @@ export const SignUpSchema = z.object({
 export const AskQuestionSchema = z.object({
   title: z
     .string()
-    .min(5, { message: "Title is required." })
-    .max(100, { message: "Title cannot exceed 100 characters." }),
-
-  content: z.string().min(1, { message: "Body is required." }),
+    .min(5, {
+      message: "Title must be at least 5 characters.",
+    })
+    .max(130, { message: "Title musn't be longer then 130 characters." }),
+  content: z.string().min(100, { message: "Minimum of 100 characters." }),
   tags: z
     .array(
       z
         .string()
-        .min(1, { message: "Tag is required." })
-        .max(30, { message: "Tag cannot exceed 30 characters." }),
+        .min(1, { message: "Tag must have at least 1 character." })
+        .max(15, { message: "Tag must not exceed 15 characters." }),
     )
-    .min(1, { message: "At least one tag is required." })
-    .max(3, { message: "Cannot add more than 3 tags." }),
+    .min(1, { message: "Add at least one tag." })
+    .max(3, { message: "Maximum of 3 tags." }),
 });
 
 export const UserSchema = z.object({
   name: z.string().min(1, "Name is required"),
   username: z.string().min(3, "Username must be at least 3 characters"),
-  email: z.string().email("Invalid email address"),
+  email: z.email("Invalid email address"),
   bio: z.string().optional(),
-  image: z.string().url("Invalid image URL").optional(),
+  image: z.url("Invalid image URL").optional(),
   location: z.string().optional(),
   portfolio: z.string().url("Invalid portfolio URL").optional(),
   reputation: z.number().optional(),

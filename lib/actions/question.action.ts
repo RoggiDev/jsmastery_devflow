@@ -50,7 +50,7 @@ export async function createQuestion(
       const existingTag = await Tag.findOneAndUpdate(
         { name: { $regex: new RegExp(`^${tag}$`, "i") } },
         { $setOnInsert: { name: tag }, $inc: { questions: 1 } },
-        { upsert: true, new: true, session },
+        { upsert: true, returnDocument: "after", session },
       );
 
       tagIds.push(existingTag._id);
@@ -118,10 +118,17 @@ export async function editQuestion(
     }
 
     const tagsToAdd = tags.filter(
-      (tag) => !question.tags.includes(tag.toLowerCase()),
+      (tag) =>
+        !question.tags.some(
+          (questionTag: ITagDoc) =>
+            questionTag.name.toLowerCase() === tag.toLowerCase(),
+        ),
     );
     const tagsToRemove = question.tags.filter(
-      (tag: ITagDoc) => !tags.includes(tag.name.toLowerCase()),
+      (questionTag: ITagDoc) =>
+        !tags.some(
+          (tag) => tag.toLowerCase() === questionTag.name.toLowerCase(),
+        ),
     );
 
     const newTagDocuments = [];
@@ -131,7 +138,7 @@ export async function editQuestion(
         const existingTag = await Tag.findOneAndUpdate(
           { name: { $regex: new RegExp(`^${tag}$`, "i") } },
           { $setOnInsert: { name: tag }, $inc: { questions: 1 } },
-          { upsert: true, new: true, session },
+          { upsert: true, returnDocument: "after", session },
         );
 
         if (existingTag) {

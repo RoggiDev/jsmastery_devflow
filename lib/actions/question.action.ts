@@ -233,7 +233,8 @@ export async function getQuestions(
   const skip = (Number(page) - 1) * pageSize;
   const limit = Number(pageSize);
 
-  const filterQuery: mongoose.QueryFilter<IQuestionDoc> = {};
+  // const filterQuery: mongoose.QueryFilter<IQuestionDoc> = {};
+  const filterQuery: mongoose.QueryFilter<typeof Question> = {};
 
   if (filter === "recommended") {
     return { success: true, data: { questions: [], isNext: false } };
@@ -279,7 +280,10 @@ export async function getQuestions(
 
     return {
       success: true,
-      data: { questions: JSON.parse(JSON.stringify(questions)), isNext },
+      data: {
+        questions: JSON.parse(JSON.stringify(questions)),
+        isNext,
+      },
     };
   } catch (error) {
     return handleError(error) as ErrorResponse;

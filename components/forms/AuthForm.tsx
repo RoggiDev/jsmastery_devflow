@@ -2,6 +2,7 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import {
   DefaultValues,
   FieldValues,
@@ -17,7 +18,6 @@ import { Field, FieldLabel, FieldError } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import ROUTES from "@/constants/routes";
 import { toast } from "sonner";
-import { useRouter } from "next/navigation";
 
 interface AuthFormProps<T extends FieldValues> {
   schema: z.ZodType<T, T>;
@@ -34,7 +34,7 @@ const AuthForm = <T extends FieldValues>({
 }: AuthFormProps<T>) => {
   const router = useRouter();
 
-  const form = useForm<T>({
+  const form = useForm<z.infer<typeof schema>>({
     resolver: zodResolver(schema),
     defaultValues: defaultValues as DefaultValues<T>,
   });

@@ -1,6 +1,8 @@
-import { DEFAULT_EMPTY, DEFAULT_ERROR } from "@/constants/states";
 import Image from "next/image";
 import Link from "next/link";
+
+import { DEFAULT_EMPTY, DEFAULT_ERROR } from "@/constants/states";
+
 import { Button } from "./ui/button";
 
 interface Props<T> {

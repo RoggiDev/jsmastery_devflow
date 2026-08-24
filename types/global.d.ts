@@ -15,10 +15,11 @@ interface Question {
   content: string;
   tags: Tag[];
   author: Author;
-  createdAt: Date;
   upvotes: number;
+  downvotes: number;
   answers: number;
   views: number;
+  createdAt: Date;
 }
 
 type ActionResponse<T = null> = {

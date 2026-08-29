@@ -7,6 +7,7 @@ import {
   SelectContent,
   SelectGroup,
   SelectItem,
+  SelectLabel,
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
@@ -64,6 +65,7 @@ const CommonFilter = ({
 
         <SelectContent>
           <SelectGroup>
+            <SelectLabel>Filters</SelectLabel>
             {filters.map((item) => (
               <SelectItem key={item.value} value={item.value}>
                 {item.name}

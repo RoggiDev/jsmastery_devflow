@@ -1,4 +1,5 @@
 export const HomePageFilters = [
+  { name: "Select a filter", value: "" },
   { name: "Newest", value: "newest" },
   { name: "Popular", value: "popular" },
   { name: "Unanswered", value: "unanswered" },
@@ -6,12 +7,14 @@ export const HomePageFilters = [
 ];
 
 export const AnswerFilters = [
+  { name: "Select a filter", value: "" },
   { name: "Newest", value: "latest" },
   { name: "Oldest", value: "oldest" },
   { name: "Popular", value: "popular" },
 ];
 
 export const CollectionFilters = [
+  { name: "Select a filter", value: "" },
   { name: "Oldest", value: "oldest" },
   { name: "Most Voted", value: "mostvoted" },
   { name: "Most Viewed", value: "mostviewed" },
@@ -20,6 +23,7 @@ export const CollectionFilters = [
 ];
 
 export const TagFilters = [
+  { name: "Select a filter", value: "" },
   { name: "A-Z", value: "name" },
   { name: "Recent", value: "recent" },
   { name: "Oldest", value: "oldest" },
@@ -27,6 +31,7 @@ export const TagFilters = [
 ];
 
 export const UserFilters = [
+  { name: "Select a filter", value: "" },
   { name: "Newest", value: "newest" },
   { name: "Oldest", value: "oldest" },
   { name: "Popular", value: "popular" },

@@ -419,7 +419,6 @@ export async function deleteQuestion(
 
     // Commit transaction
     await session.commitTransaction();
-    session.endSession();
 
     // Revalidate to reflect immediate changes on UI
     revalidatePath(`/profile/${user?.id}`);
@@ -427,8 +426,9 @@ export async function deleteQuestion(
     return { success: true };
   } catch (error) {
     await session.abortTransaction();
-    session.endSession();
 
     return handleError(error) as ErrorResponse;
+  } finally {
+    await session.endSession();
   }
 }

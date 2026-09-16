@@ -1,6 +1,8 @@
 "use server";
 
 import mongoose from "mongoose";
+import { revalidatePath } from "next/cache";
+import { after } from "next/server";
 
 import Question, { IQuestionDoc } from "@/database/question.model";
 import TagQuestion from "@/database/tag-question.model";
@@ -16,10 +18,10 @@ import {
   IncrementViewsSchema,
   PaginatedSearchParamsSchema,
 } from "../validations";
-import { revalidatePath } from "next/cache";
 import ROUTES from "@/constants/routes";
 import dbConnect from "../mongoose";
 import { Answer, Collection, Vote } from "@/database";
+import { createInteraction } from "./interaction.action";
 
 export async function createQuestion(
   params: CreateQuestionParams,
@@ -74,6 +76,16 @@ export async function createQuestion(
       { $push: { tags: { $each: tagIds } } },
       { session },
     );
+
+    // log the interaction
+    after(async () => {
+      await createInteraction({
+        action: "post",
+        actionId: question._id.toString(),
+        actionTarget: "question",
+        authorId: userId as string,
+      });
+    });
 
     await session.commitTransaction();
 

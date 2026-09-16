@@ -33,6 +33,7 @@ const AnswerForm = ({ questionId, questionTitle, questionContent }: Props) => {
   const session = useSession();
 
   const editorRef = useRef<MDXEditorMethods>(null);
+  const [editorKey, setEditorKey] = useState(0);
 
   const form = useForm<z.infer<typeof AnswerSchema>>({
     resolver: zodResolver(AnswerSchema),
@@ -51,12 +52,19 @@ const AnswerForm = ({ questionId, questionTitle, questionContent }: Props) => {
       if (result.success) {
         form.reset();
 
+        setEditorKey((key) => key + 1);
+
+        window.scrollTo({
+          top: 0,
+          behavior: "smooth",
+        });
+
         toast.success("Success", {
           description: "Your answer has been posted successfully",
         });
 
         /* if (editorRef.current) {
-          editorRef.current.setMarkdown("");
+          editorRef.current?.setMarkdown("");
         } */
       } else {
         toast.error("Error", {
@@ -159,6 +167,7 @@ const AnswerForm = ({ questionId, questionTitle, questionContent }: Props) => {
               className="mt-3.5 flex w-full flex-col gap-3"
             >
               <Editor
+                key={editorKey}
                 value={field.value}
                 editorRef={editorRef}
                 fieldChange={field.onChange}

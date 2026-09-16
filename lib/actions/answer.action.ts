@@ -32,11 +32,11 @@ export async function createAnswer(
   const userId = validationResult?.session?.user?.id;
 
   const session = await mongoose.startSession();
-  session.startTransaction();
 
   try {
-    const question = await Question.findById(questionId);
+    session.startTransaction();
 
+    const question = await Question.findById(questionId).session(session);
     if (!question) throw new Error("Question not found");
 
     const [newAnswer] = await Answer.create(
@@ -55,8 +55,10 @@ export async function createAnswer(
     question.answers += 1;
     await question.save({ session });
 
+    // Commit transaction
     await session.commitTransaction();
 
+    // Revalidate to reflect immediate changes on UI
     revalidatePath(ROUTES.QUESTION(questionId));
 
     return {
@@ -65,6 +67,7 @@ export async function createAnswer(
     };
   } catch (error) {
     await session.abortTransaction();
+
     return handleError(error) as ErrorResponse;
   } finally {
     await session.endSession();

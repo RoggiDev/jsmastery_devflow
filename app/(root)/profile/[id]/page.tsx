@@ -1,24 +1,26 @@
+import dayjs from "dayjs";
+import Link from "next/link";
+import { notFound } from "next/navigation";
+
 import { auth } from "@/auth";
+import AnswerCard from "@/components/cards/AnswerCard";
+import QuestionCard from "@/components/cards/QuestionCard";
+import TagCard from "@/components/cards/TagCard";
+import DataRenderer from "@/components/DataRenderer";
+import Pagination from "@/components/Pagination";
+import { Button } from "@/components/ui/button";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import ProfileLink from "@/components/user/ProfileLink";
+import Stats from "@/components/user/Stats";
 import UserAvatar from "@/components/UserAvatar";
+import { EMPTY_ANSWERS, EMPTY_QUESTION, EMPTY_TAGS } from "@/constants/states";
 import {
   getUser,
   getUserQuestions,
   getUsersAnswers,
+  getUserStats,
   getUserTopTags,
 } from "@/lib/actions/user.action";
-import { notFound } from "next/navigation";
-import dayjs from "dayjs";
-import { Button } from "@/components/ui/button";
-import Link from "next/link";
-import Stats from "@/components/user/Stats";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import DataRenderer from "@/components/DataRenderer";
-import { EMPTY_ANSWERS, EMPTY_QUESTION, EMPTY_TAGS } from "@/constants/states";
-import QuestionCard from "@/components/cards/QuestionCard";
-import Pagination from "@/components/Pagination";
-import AnswerCard from "@/components/cards/AnswerCard";
-import TagCard from "@/components/cards/TagCard";
 
 const Profile = async ({ params, searchParams }: RouteParams) => {
   const { id } = await params;
@@ -38,7 +40,9 @@ const Profile = async ({ params, searchParams }: RouteParams) => {
       </div>
     );
 
-  const { user, totalQuestions, totalAnswers } = data!;
+  const { user } = data!;
+
+  const { data: userStats } = await getUserStats({ userId: id });
 
   const {
     success: userQuestionsSuccess,
@@ -133,13 +137,9 @@ const Profile = async ({ params, searchParams }: RouteParams) => {
       </section>
 
       <Stats
-        totalQuestions={totalQuestions}
-        totalAnswers={totalAnswers}
-        badges={{
-          GOLD: 0,
-          SILVER: 0,
-          BRONZE: 0,
-        }}
+        totalQuestions={userStats?.totalQuestions || 0}
+        totalAnswers={userStats?.totalAnswers || 0}
+        badges={userStats?.badges || { GOLD: 0, SILVER: 0, BRONZE: 0 }}
         reputationPoints={user.reputation || 0}
       />
 

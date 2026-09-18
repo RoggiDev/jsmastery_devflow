@@ -7,9 +7,7 @@ import { cn } from "@/lib/utils";
 import { formUrlQuery, removeKeysFromUrlQuery } from "@/lib/url";
 
 const filters = [
-  { name: "React", value: "react" },
-  { name: "JavaScript", value: "javascript" },
-  /* {
+  {
     name: "Newest",
     value: "newest",
   },
@@ -24,7 +22,7 @@ const filters = [
   {
     name: "Recommended",
     value: "recommended",
-  }, */
+  },
 ];
 
 const HomeFilter = () => {

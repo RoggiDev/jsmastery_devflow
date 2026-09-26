@@ -39,12 +39,6 @@ const AnswerCard = ({
     >
       <span id={`answer-${_id}`} className="hash-span" />
 
-      {showActionBtns && (
-        <div className="background-light800 flex-center absolute -top-5 -right-2 size-9 rounded-full">
-          <EditDeleteAction type="Answer" itemId={_id} />
-        </div>
-      )}
-
       <div className="mb-5 flex flex-col-reverse justify-between gap-5 sm:flex-row sm:items-center sm:gap-2">
         <div className="flex flex-1 items-start gap-1 sm:items-center">
           <UserAvatar
@@ -78,6 +72,12 @@ const AnswerCard = ({
               upvotes={upvotes}
               downvotes={downvotes}
             />
+
+            {showActionBtns && (
+              <div className="background-light800 flex-center size-9 rounded-full">
+                <EditDeleteAction type="Answer" itemId={_id} />
+              </div>
+            )}
           </Suspense>
         </div>
       </div>

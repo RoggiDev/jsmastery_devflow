@@ -60,7 +60,7 @@ const FindJobs = async ({ searchParams }: RouteParams) => {
   const countries = await fetchCountries();
   const parsedPage = parseInt(page ?? 1);
 
-  console.log("Jobs", jobs);
+  // console.log("Jobs", jobs);
 
   return (
     <>
@@ -70,7 +70,7 @@ const FindJobs = async ({ searchParams }: RouteParams) => {
         <JobsFilter countriesList={countries} />
       </div>
 
-      <section className="light-border mt-11 mb-9 flex flex-col gap-9 border-b pb-9">
+      <section className="light-border mt-11 mb-9 flex flex-col gap-9 pb-9">
         {jobs?.jobs.length > 0 ? (
           jobs.jobs
             ?.filter((job: Job) => job.job_title)

@@ -128,3 +128,8 @@ interface JobFilterParams {
   query: string;
   country: string;
 }
+
+interface GlobalSearchParams {
+  query: string;
+  type: string | null;
+}

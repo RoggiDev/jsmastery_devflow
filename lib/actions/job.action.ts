@@ -45,11 +45,11 @@ export const fetchJobs = async (filters: JobFilterParams) => {
 
   const result = await response.json();
 
-  console.log("Query:", query);
-  console.log("Country:", country);
+  // console.log("Query:", query);
+  // console.log("Country:", country);
 
-  console.log("Status:", response.status);
-  console.log("Result:", result);
+  // console.log("Status:", response.status);
+  // console.log("Result:", result);
 
   return result.data;
 };

@@ -240,6 +240,11 @@ export const CreateInteractionSchema = z.object({
   authorId: z.string().min(1),
 });
 
+export const GlobalSearchSchema = z.object({
+  query: z.string(),
+  type: z.string().nullable().optional(),
+});
+
 export const ProfileSchema = z.object({
   name: z
     .string()
@@ -250,7 +255,10 @@ export const ProfileSchema = z.object({
   username: z
     .string()
     .min(3, { message: "username musn't be longer then 100 characters." }),
-  portfolio: z.string().url({ message: "Please provide valid URL" }),
+  portfolio: z
+    .url({ message: "Please provide valid URL" })
+    .optional()
+    .or(z.literal("")),
   location: z.string().min(3, { message: "Please provide proper location" }),
   bio: z.string().min(3, {
     message: "Bio must be at least 3 characters.",
@@ -267,14 +275,12 @@ export const UpdateUserSchema = z.object({
   username: z
     .string()
     .min(3, { message: "username musn't be longer then 100 characters." }),
-  portfolio: z.string().url({ message: "Please provide valid URL" }),
+  portfolio: z
+    .url({ message: "Please provide valid URL" })
+    .optional()
+    .or(z.literal("")),
   location: z.string().min(3, { message: "Please provide proper location" }),
   bio: z.string().min(3, {
     message: "Bio must be at least 3 characters.",
   }),
-});
-
-export const GlobalSearchSchema = z.object({
-  query: z.string(),
-  type: z.string().nullable().optional(),
 });

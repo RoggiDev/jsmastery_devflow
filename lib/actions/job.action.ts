@@ -1,13 +1,17 @@
-export const fetchLocation = async () => {
-  const response = await fetch(
-    "http://ip-api.com/json/?fields=city,countryCode",
-  );
+export const fetchLocation = async (ip?: string) => {
+  const url = ip
+    ? `http://ip-api.com/json/${ip}?fields=city,countryCode`
+    : "http://ip-api.com/json/?fields=city,countryCode";
+
+  const response = await fetch(url);
 
   const location = await response.json();
 
+  console.log(location);
+
   return {
     city: location.city,
-    countryCode: location.countryCode.toLowerCase(),
+    countryCode: location.countryCode?.toLowerCase(),
   };
 };
 

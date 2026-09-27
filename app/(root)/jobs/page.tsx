@@ -6,6 +6,7 @@ import {
   fetchJobs,
   fetchLocation,
 } from "@/lib/actions/job.action";
+import { headers } from "next/headers";
 import Image from "next/image";
 
 interface StateSkeletonProps {
@@ -49,7 +50,24 @@ const StateSkeleton = ({ image, title, message }: StateSkeletonProps) => (
 const FindJobs = async ({ searchParams }: RouteParams) => {
   const { query, location, page } = await searchParams;
 
-  const userLocation = await fetchLocation();
+  const requestHeaders = await headers();
+
+  const forwardedFor = requestHeaders.get("x-forwarded-for");
+  let userIp = forwardedFor?.split(",")[0].trim();
+
+  const isLocalhost =
+    !userIp ||
+    userIp === "::1" ||
+    userIp === "127.0.0.1" ||
+    userIp.startsWith("127.");
+
+  if (isLocalhost) {
+    userIp = undefined;
+  }
+
+  // console.log(userIp);
+
+  const userLocation = await fetchLocation(userIp);
   const { city, countryCode } = userLocation;
 
   const jobs = await fetchJobs({
